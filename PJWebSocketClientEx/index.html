@@ -19,19 +19,19 @@
     
     <script>
         var server = 'wss://localhost:7070'; //如果开启了https则这里是wss
-        var WEB_SOCKET=null;
+        var vWebSocket=null;
         window.onload = function () {
             //建立一個web socket 連線
-            WEB_SOCKET=new WebSocket(server+'/ws');
-            document.getElementById("btnSend").addEventListener("click", myFunction);
+            vWebSocket=new WebSocket(server+'/ws');
+            document.getElementById("btnSend").addEventListener("click", sendMsg);
             //如果連線成功
-            WEB_SOCKET.onopen=function(e){
-                console.log('connection');
+            vWebSocket.onopen=function(e){
+                console.log('connection start ...');
                 var content=document.getElementById("lbMsg");
                 content.innerText=content.innerText+'\r\n'+"conection.....";
             }
             //接收到訊息時
-            WEB_SOCKET.onmessage=function(e){
+            vWebSocket.onmessage=function(e){
                 console.log('Recevied Message:'+e.data);
                 if(e.data){
                     var content=document.getElementById("lbMsg");
@@ -39,26 +39,23 @@
                 }
             }
             //關閉連線時
-            WEB_SOCKET.onclose=function(e){
+            vWebSocket.onclose=function(e){
                 console.log("connection closed");
             }
         };
 
- 
-
-
-        function myFunction()
+        function sendMsg()
         {
             var txtName=document.getElementById("txtName").value;
             var txtMsg=document.getElementById("txtMsg").value;
             if (txtName) {
-            var msg = {
-                action: 'sendMsg',
-                name: txtName,
-                msg: txtMsg
-            };
-            WEB_SOCKET.send(JSON.stringify(msg));
-    }
+                var data = {
+                    action: 'sendMsg',
+                    name: txtName,
+                    msg: txtMsg
+                };
+                vWebSocket.send(JSON.stringify(data));
+            }
         }
 
     </script>
